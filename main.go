@@ -37,7 +37,9 @@ func main() {
 
 func ipAddressHandler(w http.ResponseWriter, r *http.Request) {
 	var ip string
-	if appengine.IsAppEngine() {
+	if trueClientIP := r.Header.Get("True-Client-Ip"); trueClientIP != "" {
+		ip = trueClientIP
+	} else if appengine.IsAppEngine() {
 		ip = r.Header.Get("X-Appengine-User-Ip")
 	} else {
 		var err error
